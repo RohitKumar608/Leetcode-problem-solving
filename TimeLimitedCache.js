@@ -58,6 +58,50 @@ TimeLimitedCache.prototype.count = function () {
   return this.expiredKey
 }
 
+var TimeLimitedCache2 = function () {
+  this.cache = {}
+  this.size = 0
+}
+
+/**
+ * @param {number} key
+ * @param {number} value
+ * @param {number} time until expiration in ms
+ * @return {boolean} if un-expired key already existed
+ */
+TimeLimitedCache2.prototype.set = function (key, value, duration) {
+  const res = !!this.cache[key]
+  if (this.cache[key]) clearTimeout(this.cache[key].timeOut)
+  else this.size++
+  this.cache[key] = {
+    value,
+    duration,
+    isExpired: false,
+    timeOut: setTimeout(() => {
+      this.cache[key].isExpired = true
+      this.size--
+    }, duration),
+  }
+  return res
+}
+
+/**
+ * @param {number} key
+ * @return {number} value associated with key
+ */
+TimeLimitedCache2.prototype.get = function (key) {
+  if (this.cache[key] && !this.cache[key].isExpired)
+    return this.cache[key].value
+  return -1
+}
+
+/**
+ * @return {number} count of non-expired keys
+ */
+TimeLimitedCache2.prototype.count = function () {
+  return this.size
+}
+
 var obj = new TimeLimitedCache()
 obj.set(1, 42, 100)
 setTimeout(() => {
