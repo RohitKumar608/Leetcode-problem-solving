@@ -11,7 +11,7 @@ var longestPalindrome = function (s) {
   let right = s.length - 1
 
   while (right > left && left < s.length) {
-    if (s[left] == s[right]) {
+    if (s[left] == s[right] && maxVal <= right + 1 - left) {
       let tempI = left
       let temJ = right
       let isEventBreak = false
