@@ -9,19 +9,42 @@ var longestPalindrome = function (s) {
   }
   const map = {}
   let maxVal = 0
-  for (let i = 0; i < s.length; i++) {
-    for (let j = s.length - 1; j >= 0; j--) {
-      if (s[i] === s[j]) {
-        const subStr1 = s.substring(i, j + 1)
-        if (subStr1 === subStr1.split('').reverse().join('')) {
-          maxVal = Math.max(maxVal, subStr1.length)
-          if (!map[subStr1.length]) map[subStr1.length] = [subStr1]
-          else map[subStr1.length] = [...map[subStr1.length], subStr1]
+  let right = s.length - 1
+  let left = 0
+  while (right > left && left < s.length) {
+    if (s[left] == s[right]) {
+      let tempI = left
+      let temJ = right
+      let isEventBreak = false
+      while (tempI <= right) {
+        if (s[tempI] !== s[temJ]) {
+          isEventBreak = true
+          break
+        }
+        tempI++
+        temJ--
+      }
+      if (!isEventBreak) {
+        const subStr = s.substring(left, right + 1)
+        maxVal = Math.max(maxVal, subStr.length)
+        if (map[subStr.length]) {
+          map[subStr.length] = [...map[subStr.length], subStr]
+        } else {
+          map[subStr.length] = [subStr]
         }
       }
     }
+    right--
+    if (right === left) {
+      left++
+
+      right = s.length - 1
+    }
   }
-  return map[maxVal][0]
+  return maxVal > 1 ? map[maxVal][0] : s[0]
 }
 
-console.log(longestPalindrome('babad'))
+// console.log(longestPalindrome('babad'))
+// console.log(longestPalindrome('cbbd'))
+// console.log(longestPalindrome('aacabdkacaa'))
+console.log(longestPalindrome('eabcb'))
