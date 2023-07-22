@@ -25,23 +25,19 @@ var longestPalindrome = function (s) {
         temJ--
       }
       if (!isEventBreak) {
-        const subStr = s.substring(left, right + 1)
-        maxVal = Math.max(maxVal, subStr.length)
-        if (map[subStr.length]) {
-          map[subStr.length] = [...map[subStr.length], subStr]
-        } else {
-          map[subStr.length] = [subStr]
+        maxVal = Math.max(maxVal, right + 1 - left)
+        if (!map[right + 1 - left]) {
+          map[right + 1 - left] = [left, right + 1]
         }
       }
     }
     right--
     if (right === left) {
       left++
-
       right = s.length - 1
     }
   }
-  return maxVal > 1 ? map[maxVal][0] : s[0]
+  return maxVal > 1 ? s.substring(map[maxVal][0], map[maxVal][1]) : s[0]
 }
 
 // console.log(longestPalindrome('babad'))
