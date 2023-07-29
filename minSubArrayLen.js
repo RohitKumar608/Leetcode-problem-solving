@@ -4,16 +4,15 @@
  * @param {number[]} nums
  * @return {number}
  */
+
 var minSubArrayLen = function (target, nums) {
   let sum = 0
   let minLength = 999999999
   let left = 0
   let right = 0
   while (right < nums.length) {
-    if (sum < target && nums[right]) {
-      sum += nums[right]
-      right++
-    }
+    sum += nums[right]
+    right++
     while (sum >= target) {
       minLength = Math.min(minLength, right - left)
       sum -= nums[left]
