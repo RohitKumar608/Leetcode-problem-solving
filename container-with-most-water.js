@@ -5,13 +5,19 @@
  * @return {number}
  */
 var maxArea = function (height) {
-  let max = 0
-  for (let i = 0; i < height.length; i++) {
-    for (let j = 1 + i; j < height.length; j++) {
-      max = Math.max(max, Math.min(height[i], height[j]) * (j - i))
+  let maxVolume = 0
+  let leftPointer = 0
+  let rightPointer = height.length - 1
+  while (leftPointer < rightPointer) {
+    const minVal = Math.min(height[leftPointer], height[rightPointer])
+    maxVolume = Math.max(minVal * (rightPointer - leftPointer), maxVolume)
+    if (height[leftPointer] < height[rightPointer]) {
+      leftPointer = leftPointer + 1
+    } else {
+      rightPointer = rightPointer - 1
     }
   }
-  return max
+  return maxVolume
 }
 
 console.log(maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7]))
