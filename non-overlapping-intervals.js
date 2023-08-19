@@ -5,24 +5,29 @@
  * @return {number}
  */
 var eraseOverlapIntervals = function (intervals) {
+  intervals.sort((a, b) => a[0] - b[0])
+  let prevEnd = intervals[0][1]
   let result = 0
-  intervals.sort((a, b) => b[1] - a[1]).sort((a, b) => a[0] - b[0])
-  for (let i = 0; i < intervals.length; i++) {
-    let isOverlapped = false
-    for (let j = 1 + i; j < intervals.length; j++) {
-      if (
-        intervals[i][0] >= intervals[j][0] &&
-        intervals[i][1] >= intervals[j][1]
-      ) {
-        isOverlapped = true
-      }
-    }
-    if (isOverlapped) {
+  for (let i = 1; i < intervals.length; i++) {
+    const [start, end] = intervals[i]
+    if (start >= prevEnd) {
+      prevEnd = end
+    } else {
       result++
+      prevEnd = Math.min(prevEnd, end)
     }
   }
   return result
 }
+
+console.log(
+  eraseOverlapIntervals([
+    [1, 100],
+    [11, 22],
+    [1, 11],
+    [2, 12],
+  ])
+)
 
 console.log(
   eraseOverlapIntervals([
