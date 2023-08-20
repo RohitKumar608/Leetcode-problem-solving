@@ -11,7 +11,7 @@
  * @param {number} target
  * @return {number[]}
  */
-var twoSum = function (nums, target) {
+var twoSum1 = function (nums, target) {
   const map = {}
   for (let i = 0; i < nums.length; i++) {
     const diff = target - nums[i]
@@ -20,9 +20,8 @@ var twoSum = function (nums, target) {
   }
 }
 
-var twoSum1 = function (nums, target) {
-  const leftMap = {}
-  const rightMap = {}
+var twoSum = function (nums, target) {
+  const mapSet = {}
   let left = 0
   let right = nums.length - 1
   while (left <= right) {
@@ -30,26 +29,13 @@ var twoSum1 = function (nums, target) {
     if (sum === target) {
       return [left, right]
     }
-    if (
-      rightMap[target - nums[left]] >= 0 ||
-      leftMap[target - nums[left]] >= 0
-    ) {
-      return [
-        left,
-        leftMap[target - nums[left]] || rightMap[target - nums[left]] || 0,
-      ]
+    if (mapSet[target - nums[left]] >= 0) {
+      return [mapSet[target - nums[left]], left]
+    } else if (mapSet[target - nums[right]] >= 0) {
+      return [mapSet[target - nums[right]], right]
     }
-    if (
-      leftMap[target - nums[right]] >= 0 ||
-      rightMap[target - nums[right]] >= 0
-    ) {
-      return [
-        right,
-        rightMap[target - nums[right]] || leftMap[target - nums[right]] || 0,
-      ]
-    }
-    leftMap[nums[left]] = left
-    rightMap[nums[right]] = right
+    mapSet[nums[left]] = left
+    mapSet[nums[right]] = right
     left++
     right--
   }
