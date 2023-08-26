@@ -10,35 +10,34 @@
  * @param {number} k
  * @return {ListNode}
  */
+
 var rotateRight = function (head, k) {
-  let count = 0
+  if (k === 0) return head
+  let length = 0
+
   let dummyHead = head
   while (dummyHead) {
-    count++
+    length++
     dummyHead = dummyHead.next
   }
-  k = k % count
-  let lastNode = null
-  let length = 0
+  k = k % length
+  if (length <= 1 || k === 0) return head
+
   let temHead = head
-  while (temHead) {
-    length++
+  let runs = length - k
+
+  while (runs > 1) {
     temHead = temHead?.next
-    if (length - k - 1 === 0) {
-      lastNode = head
-      head = head.next
-      if (head.next?.next) head.next.next = null
-      else head.next = null
-      break
-    }
+    runs--
   }
-  let reverse = temHead
-  while (temHead?.next) {
-    temHead = temHead?.next
+  const tempVal = temHead?.next
+  if (temHead) temHead.next = null
+  let reverse = tempVal
+  while (reverse?.next) {
+    reverse = reverse?.next
   }
-  // if (temHead) temHead.next = lastNode
-  console.log(lastNode)
-  return reverse
+  if (tempVal && reverse) reverse.next = head
+  return tempVal
 }
 
-console.log(rotateRight(linkedList.head, 4))
+console.log(rotateRight(linkedList.head, 2))
