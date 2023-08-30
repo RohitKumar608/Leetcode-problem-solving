@@ -19,7 +19,6 @@ var wordPattern = function (pattern, s) {
       return false
     }
     if (typeof mapSet[pattern[i]] === 'string' && mapSet[pattern[i]] !== s[i]) {
-      console.log('object')
       return false
     }
 
