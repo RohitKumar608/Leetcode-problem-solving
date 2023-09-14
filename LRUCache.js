@@ -2,11 +2,52 @@
 
 /**
  * @param {number} capacity
- */
+` */
+
+class Node {
+  constructor(key, value) {
+    this.next = null
+    this.val = value
+    this.key = key
+  }
+}
+
 var LRUCache = function (capacity) {
-  this.array = []
+  this.head = null
+  this.tail = null
+  this.length = 0
   this.map = {}
   this.capacity = capacity
+}
+
+LRUCache.prototype.traverseNode = function (key) {
+  if (this.length == 1) {
+    return
+  }
+
+  let tempHead = this.head
+  let updateTem = null
+  if (this.head?.key === key) {
+    updateTem = tempHead
+    tempHead = tempHead.next.next
+    updateTem.next = null
+  }
+
+  while (tempHead && updateTem === null) {
+    if (tempHead.next?.key == key) {
+      updateTem = tempHead.next
+      tempHead.next = tempHead.next?.next
+      updateTem.next = null
+    }
+    tempHead = tempHead?.next
+  }
+  console.log(structuredClone(this.head), structuredClone(updateTem))
+
+  if (updateTem) {
+    this.tail.next = updateTem
+    this.tail = updateTem
+  }
+  // if (this.tail === null) this.head = this.tail
 }
 
 /**
@@ -15,11 +56,21 @@ var LRUCache = function (capacity) {
  */
 LRUCache.prototype.get = function (key) {
   if (this.map[key] !== undefined) {
-    const data = this.array.filter((val) => val !== key)
-    data.push(key)
-    this.array = data
+    this.traverseNode(key)
   }
   return this.map[key] !== undefined ? this.map[key] : -1
+}
+
+LRUCache.prototype.insert = function (key, value) {
+  const node = new Node(key, value)
+  this.length++
+  if (this.head == null) {
+    this.head = node
+    this.tail = node
+  } else {
+    this.tail.next = node
+    this.tail = node
+  }
 }
 
 /**
@@ -28,46 +79,60 @@ LRUCache.prototype.get = function (key) {
  * @return {void}
  */
 LRUCache.prototype.put = function (key, value) {
-  const isThere = this.map[key]
+  const isExist = this.map[key]
 
-  if (this.array.length >= this.capacity && isThere === undefined) {
-    const firstVal = this.array[0]
-    this.array = this.array.filter((val) => firstVal !== val)
-    delete this.map[firstVal]
-    this.array.push(key)
+  if (isExist) {
+    this.traverseNode(key)
     this.map[key] = value
-    return isThere ? key : null
-  } else if (isThere !== undefined) {
-    const data = this.array.filter((val) => val !== key)
-    data.push(key)
-    alert('')
-    this.array = data
+    return isExist || null
+  }
+  if (this.length >= this.capacity) {
+    const deletedVal = this.head?.key
+    this.head = this.head.next
+    delete this.map[deletedVal]
+    this.length--
+    this.insert(key, value)
     this.map[key] = value
-    return isThere ? key : null
+    return null
   } else {
-    this.array.push(key)
+    this.insert(key, value)
     this.map[key] = value
-    return isThere ? key : null
+    return isExist || null
   }
 }
 
-var lRUCache = new LRUCache(2)
-console.log(lRUCache.put(1, 1)) // cache is {1=1}
-console.log(lRUCache.put(2, 2)) // cache is {1=1, 2=2}
-console.log(lRUCache.get(1)) // return 1
-console.log(lRUCache.put(3, 3)) // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
-console.log(lRUCache.get(2)) // returns -1 (not found)
-console.log(lRUCache.put(4, 4)) // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
-console.log(lRUCache.get(1)) // return -1 (not found)
-console.log(lRUCache.get(3)) // return 3
-console.log(lRUCache.get(4)) // return 4
+var lRUCache = new LRUCache(3)
+/*
+,
+  'put',
+  'get',
+  'get',
+  'get',
+  'get',
+  'get',*/
+const operations = ['put', 'put', 'put', 'put', 'get']
+const data = [
+  [1, 1],
+  [2, 2],
+  [3, 3],
+  [4, 4],
+  [4],
+  [3],
+  [2],
+  [1],
+  [5, 5],
+  [1],
+  [2],
+  [3],
+  [4],
+  [5],
+]
+operations.forEach((op, idx) => {
+  if (op === 'get') {
+    console.log(lRUCache.get(data[idx][0]))
+  } else {
+    console.log(lRUCache.put(...data[idx]))
+  }
+})
 
-// const data = [[2], [2, 6], [1], [1, 5], [1, 2], [1], [2]]
-// const operations = ['get', 'put', 'get', 'put', 'put', 'get', 'get']
-// operations.forEach((op, idx) => {
-//   if (op === 'get') {
-//     console.log(lRUCache.get(data[idx][0]))
-//   } else {
-//     console.log(lRUCache.put(...data[idx]))
-//   }
-// })
+console.log(lRUCache)
