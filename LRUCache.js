@@ -17,6 +17,7 @@ var LRUCache = function (capacity) {
   this.tail = null
   this.length = 0
   this.map = {}
+  this.linkedListMap = {}
   this.capacity = capacity
 }
 
@@ -27,27 +28,29 @@ LRUCache.prototype.traverseNode = function (key) {
 
   let tempHead = this.head
   let updateTem = null
-  if (this.head?.key === key) {
+
+  if (tempHead?.key === key) {
     updateTem = tempHead
-    tempHead = tempHead.next.next
+    this.head = tempHead.next
     updateTem.next = null
   }
 
-  while (tempHead && updateTem === null) {
+  while (tempHead?.next && updateTem === null) {
     if (tempHead.next?.key == key) {
       updateTem = tempHead.next
       tempHead.next = tempHead.next?.next
       updateTem.next = null
+    } else {
+      tempHead = tempHead?.next
     }
-    tempHead = tempHead?.next
   }
-  console.log(structuredClone(this.head), structuredClone(updateTem))
-
-  if (updateTem) {
+  if (tempHead && this.tail?.key === updateTem?.key) {
+    tempHead.next = updateTem
+    this.tail = updateTem
+  } else {
     this.tail.next = updateTem
     this.tail = updateTem
   }
-  // if (this.tail === null) this.head = this.tail
 }
 
 /**
@@ -104,13 +107,24 @@ LRUCache.prototype.put = function (key, value) {
 var lRUCache = new LRUCache(3)
 /*
 ,
+
+  */
+const operations = [
+  'put',
+  'put',
+  'put',
   'put',
   'get',
   'get',
   'get',
   'get',
-  'get',*/
-const operations = ['put', 'put', 'put', 'put', 'get']
+  'put',
+  'get',
+  'get',
+  'get',
+  'get',
+  'get',
+]
 const data = [
   [1, 1],
   [2, 2],
