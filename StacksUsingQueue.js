@@ -7,7 +7,7 @@ class Node {
   }
 }
 
-var MyStack = function () {
+var MyStack1 = function () {
   this.head = null
   this.tail = null
   this.length = 0
@@ -18,7 +18,7 @@ var MyStack = function () {
  * @param {number} x
  * @return {void}
  */
-MyStack.prototype.push = function (x) {
+MyStack1.prototype.push = function (x) {
   const node = new Node(x)
   this.length++
 
@@ -48,7 +48,7 @@ MyStack.prototype.push = function (x) {
 /**
  * @return {number}
  */
-MyStack.prototype.pop = function () {
+MyStack1.prototype.pop = function () {
   let tempHead = this.head
   let prevNode = this.isInserted ? null : this.head
 
@@ -81,7 +81,7 @@ MyStack.prototype.pop = function () {
 /**
  * @return {number}
  */
-MyStack.prototype.top = function () {
+MyStack1.prototype.top = function () {
   if (!this.isInserted) return this.head.val
   return this.tail?.val
 }
@@ -89,25 +89,52 @@ MyStack.prototype.top = function () {
 /**
  * @return {boolean}
  */
-MyStack.prototype.empty = function () {
+MyStack1.prototype.empty = function () {
   return this.length === 0
+}
+
+var MyStack = function () {
+  this.array = []
+}
+
+/**
+ * @param {number} x
+ * @return {void}
+ */
+MyStack.prototype.push = function (x) {
+  this.array.push(x)
+  return
+}
+
+/**
+ * @return {number}
+ */
+MyStack.prototype.pop = function () {
+  if (!this.array.length) {
+    return undefined
+  }
+  return this.array.pop()
+}
+
+/**
+ * @return {number}
+ */
+MyStack.prototype.top = function () {
+  return this.array[this.array.length - 1]
+}
+
+/**
+ * @return {boolean}
+ */
+MyStack.prototype.empty = function () {
+  return this.array.length === 0
 }
 
 var myQueue = ''
 
-const operations = [
-  'MyStack',
-  'push',
-  'push',
-  'push',
-  'pop',
-  'push',
-  'pop',
-  'pop',
-  'pop',
-]
+const operations = ['MyStack', 'push', 'push', 'top', 'pop', 'empty']
 
-const data = [[], [1], [2], [3], [], [4], [], [], []]
+const data = [[], [1], [2], [], [], []]
 
 operations.forEach((op, idx) => {
   if (op === 'MyStack') {
