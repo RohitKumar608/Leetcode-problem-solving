@@ -25,9 +25,30 @@ function traverse(root, arr) {
   }
 }
 
+// var kthSmallest = function (root, k) {
+//   const arr = []
+//   traverse(root, arr)
+//   arr.sort((a, b) => a - b)
+//   return arr[k - 1]
+// }
+
 var kthSmallest = function (root, k) {
-  const arr = []
-  traverse(root, arr)
-  arr.sort((a, b) => a - b)
-  return arr[k - 1]
+  let stack = []
+  let result = []
+  let current_Node = root
+  if (root === null) return undefined
+  while (current_Node !== null || stack.length > 0) {
+    while (current_Node != null) {
+      stack.push(current_Node)
+      current_Node = current_Node.left
+    }
+    current_Node = stack.pop()
+    if (current_Node) result.push(current_Node.val)
+    if (current_Node) current_Node = current_Node.right
+    if (result.length === k) return result[k - 1]
+  }
+
+  return result[k - 1]
 }
+
+console.log(kthSmallest(tree.root, 3))
