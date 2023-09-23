@@ -51,4 +51,18 @@ var kthSmallest = function (root, k) {
   return result[k - 1]
 }
 
+var kthSmallest = function (root, k) {
+  let result = null
+  const preOrderSort = (root) => {
+    if (root === null) return
+    if (root.left) preOrderSort(root.left)
+    k--
+    if (k === 0) result = root.val
+    if (root.right) preOrderSort(root.right)
+  }
+  preOrderSort(root)
+
+  return result
+}
+
 console.log(kthSmallest(tree.root, 3))
