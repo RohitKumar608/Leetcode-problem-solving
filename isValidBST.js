@@ -32,3 +32,17 @@ var isValidBST = function (root) {
 
   return true
 }
+
+var isValidBST = function (root) {
+  let result = true
+  let previousVal = null
+  const preOrderSort = (root) => {
+    if (root === null) return
+    if (root.left) preOrderSort(root.left)
+    if (previousVal !== null) result = result && root.val > previousVal
+    previousVal = root.val
+    if (root.right) preOrderSort(root.right)
+  }
+  preOrderSort(root)
+  return result
+}
