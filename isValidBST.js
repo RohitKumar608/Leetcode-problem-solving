@@ -14,7 +14,8 @@
  */
 var isValidBST = function (root) {
   let stack = []
-  let result = []
+  let result = true
+  let previousVal = null
   let current_Node = root
   if (root === null) return undefined
   while (current_Node !== null || stack.length > 0) {
@@ -23,13 +24,11 @@ var isValidBST = function (root) {
       current_Node = current_Node.left
     }
     current_Node = stack.pop()
-    if (current_Node) result.push(current_Node.val)
+    if (previousVal !== null) result = result && current_Node.val > previousVal
+    if (!result) return false
+    previousVal = current_Node.val
     if (current_Node) current_Node = current_Node.right
   }
-  let isValidTree = true
-  for (let i = 1; i < result.length; i++) {
-    isValidTree = isValidTree && result[i] > result[i - 1]
-    if (!isValidTree) return false
-  }
+
   return true
 }
