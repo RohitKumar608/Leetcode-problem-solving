@@ -20,5 +20,25 @@ var maxDepth = function (root) {
   }
   const data = travserse(root)
 
-  return data 
-};
+  return data
+}
+
+var maxDepth = function (root) {
+  if (root === null) return 0
+  let depth = 0
+  const queue = [root]
+  while (queue.length) {
+    const len = queue.length
+    for (let i = 0; i < len; i++) {
+      const root = queue.shift()
+      if (root?.left) {
+        queue.push(root.left)
+      }
+      if (root?.right) {
+        queue.push(root.right)
+      }
+    }
+    depth++
+  }
+  return depth
+}
