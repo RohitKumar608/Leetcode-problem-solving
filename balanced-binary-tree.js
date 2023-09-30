@@ -33,6 +33,19 @@ var isBalanced1 = function (root) {
   return result
 }
 
+var isBalanced = function (root) {
+  const getHeight = (root) => {
+    if (root === null) return [true, 0]
+
+    const left = getHeight(root.left)
+    const right = getHeight(root.right)
+    const isBalaced = Math.abs(left[1] - right[1]) < 2 && left[0] && right[0]
+    return [isBalaced, 1 + Math.max(left[1], right[1])]
+  }
+
+  return getHeight(root)[0]
+}
+
 const data = {
   val: 2,
   left: {
