@@ -13,13 +13,11 @@
  * @param {TreeNode} q
  * @return {boolean}
  */
-var isSameTree1 = function (p, q) {
+var isSameTree = function (p, q) {
   const traverse = (p, q) => {
     if (p === null || q === null) return p === q
-
-    return (
-      p.val === q.val && traverse(p.left, q.left) && traverse(p.right, q.right)
-    )
+    if (p.val !== q.val) return false
+    return traverse(p.left, q.left) && traverse(p.right, q.right)
   }
 
   return traverse(p, q)
