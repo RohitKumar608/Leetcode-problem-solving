@@ -35,6 +35,27 @@ var getIntersectionNode = function (headA, headB) {
   }
   return null
 }
+var getIntersectionNode1 = function (headA, headB) {
+  if (headA === null || headB === null) {
+    return null
+  }
+  let curA = headA
+  let curB = headB
+  while (curA !== curB) {
+    curA = curA.next
+    curB = curB.next
+    if (curA === curB) {
+      return curA
+    }
+    if (curA === null) {
+      curA = headB
+    }
+    if (curB === null) {
+      curB = headA
+    }
+  }
+  return curA
+}
 
 console.log(
   getIntersectionNode(
