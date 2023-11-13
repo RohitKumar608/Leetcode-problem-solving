@@ -6,36 +6,30 @@
  */
 
 var isValidSudoku = function (board) {
-  // check for row/column
   for (let i = 0; i < 9; i++) {
-    let mapSetRow = {}
-    let mapSetCol = {}
-    for (let j = 0; j < 9; j++) {
-      if (board[i][j] !== '.' && mapSetRow[board[i][j]]) {
-        return false
-      }
-      if (board[j][i] !== '.' && mapSetCol[board[j][i]]) {
-        return false
-      }
-      mapSetRow[board[i][j]] = board[i][j]
-      mapSetCol[board[j][i]] = board[j][i]
-    }
-  }
+    const rowSet = new Set()
+    const colSet = new Set()
+    const boardSet = new Set()
 
-  for (let i = 0; i < 9; i = i + 3) {
-    for (let j = 0; j < 9; j = j + 3) {
-      let mapSet = {}
-      // check for square
-      for (let k = 0; k < 3; k++) {
-        for (let l = 0; l < 3; l++) {
-          if (board[k + i][j + l] !== '.') {
-            if (!mapSet[board[k + i][j + l]]) {
-              mapSet[board[k + i][j + l]] = board[k + i][j + l]
-            } else {
-              return false
-            }
-          }
-        }
+    for (let j = 0; j < 9; j++) {
+      const rowBox = board[i][j]
+      const colBox = board[j][i]
+      const boxBoard =
+        board[3 * Math.floor(i / 3) + Math.floor(j / 3)][3 * (i % 3) + (j % 3)]
+
+      if (rowBox !== '.') {
+        if (rowSet.has(rowBox)) return false
+        rowSet.add(rowBox)
+      }
+
+      if (colBox !== '.') {
+        if (colSet.has(colBox)) return false
+        colSet.add(colBox)
+      }
+
+      if (boxBoard !== '.') {
+        if (boardSet.has(boxBoard)) return false
+        boardSet.add(boxBoard)
       }
     }
   }
