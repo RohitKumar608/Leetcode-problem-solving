@@ -1,9 +1,10 @@
+// https://leetcode.com/problems/flatten-deeply-nested-array/
 /**
  * @param {any[]} arr
  * @param {number} depth
  * @return {any[]}
  */
-var flat = function (arr, n) {
+var flat1 = function (arr, n) {
   if (n === 0) return arr
   let result = []
   for (let times = 1; times <= n; times++) {
@@ -21,3 +22,22 @@ var flat = function (arr, n) {
 
   return arr
 }
+
+var flat = function (arr, n) {
+  const result = []
+  function helper(arr, depth) {
+    for (const val of arr) {
+      if (typeof val === 'object' && depth < n) {
+        helper(val, depth + 1)
+      } else {
+        result.push(val)
+      }
+    }
+  }
+  helper(arr, 0)
+  return result
+}
+
+console.log(
+  flat([1, 2, 3, [4, 5, 6], [7, 8, [9, 10, 11], 12], [13, 14, 15]], 2)
+)
