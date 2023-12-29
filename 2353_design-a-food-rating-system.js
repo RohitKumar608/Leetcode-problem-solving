@@ -65,52 +65,52 @@
  * @param {string[]} cuisines
  * @param {number[]} ratings
  */
-var FoodRatings = function (foods, cuisines, ratings) {
-  this.food = {}
-  this.mapping = {}
-  cuisines.forEach((cuisine, idx) => {
-    this.mapping[foods[idx]] = { cuisine, rating: ratings[idx] }
-    if (!this.food[cuisine]) {
-      this.food[cuisine] = {}
-    }
-    const cuisineFoods = this.food[cuisine]
-    if (!cuisineFoods[ratings[idx]]) {
-      cuisineFoods[ratings[idx]] = []
-    }
-    cuisineFoods[ratings[idx]].push(foods[idx])
-  })
-}
+// var FoodRatings = function (foods, cuisines, ratings) {
+//   this.food = {}
+//   this.mapping = {}
+//   cuisines.forEach((cuisine, idx) => {
+//     this.mapping[foods[idx]] = { cuisine, rating: ratings[idx] }
+//     if (!this.food[cuisine]) {
+//       this.food[cuisine] = {}
+//     }
+//     const cuisineFoods = this.food[cuisine]
+//     if (!cuisineFoods[ratings[idx]]) {
+//       cuisineFoods[ratings[idx]] = []
+//     }
+//     cuisineFoods[ratings[idx]].push(foods[idx])
+//   })
+// }
 
-/**
- * @param {string} food
- * @param {number} newRating
- * @return {void}
- */
-FoodRatings.prototype.changeRating = function (food, newRating) {
-  const { cuisine, rating } = this.mapping[food]
-  this.mapping[food].rating = newRating
-  const foods = this.food[cuisine][rating] || []
-  this.food[cuisine][rating] = foods.filter((val) => val !== food)
-  if (this.food[cuisine][rating].length === 0) delete this.food[cuisine][rating]
-  if (!this.food[cuisine][newRating]) {
-    this.food[cuisine][newRating] = []
-  }
-  this.food[cuisine][newRating].push(food)
-}
+// /**
+//  * @param {string} food
+//  * @param {number} newRating
+//  * @return {void}
+//  */
+// FoodRatings.prototype.changeRating = function (food, newRating) {
+//   const { cuisine, rating } = this.mapping[food]
+//   this.mapping[food].rating = newRating
+//   const foods = this.food[cuisine][rating] || []
+//   this.food[cuisine][rating] = foods.filter((val) => val !== food)
+//   if (this.food[cuisine][rating].length === 0) delete this.food[cuisine][rating]
+//   if (!this.food[cuisine][newRating]) {
+//     this.food[cuisine][newRating] = []
+//   }
+//   this.food[cuisine][newRating].push(food)
+// }
 
-/**
- * @param {string} cuisine
- * @return {string}
- */
-FoodRatings.prototype.highestRated = function (cuisine) {
-  const filteredItems = this.food[cuisine]
-  let maxData = []
-  for (const key in filteredItems) {
-    maxData = filteredItems[key]
-  }
-  maxData.sort((a, b) => a.localeCompare(b))
-  return maxData[0]
-}
+// /**
+//  * @param {string} cuisine
+//  * @return {string}
+//  */
+// FoodRatings.prototype.highestRated = function (cuisine) {
+//   const filteredItems = this.food[cuisine]
+//   let maxData = []
+//   for (const key in filteredItems) {
+//     maxData = filteredItems[key]
+//   }
+//   maxData.sort((a, b) => a.localeCompare(b))
+//   return maxData[0]
+// }
 
 /**
  * Your FoodRatings object will be instantiated and called as such:
@@ -118,6 +118,63 @@ FoodRatings.prototype.highestRated = function (cuisine) {
  * obj.changeRating(food,newRating)
  * var param_2 = obj.highestRated(cuisine)
  */
+
+/*
+ @param{string}name
+ @param{string}cuisine
+ @param{number}rating
+ */
+function FoodData(name, cuisine, rating) {
+  this.name = name
+  this.cuisine = cuisine
+  this.rating = rating
+}
+
+class FoodRatings {
+  constructor(foods, cuisines, ratings) {
+    //Map<string, FoodData>
+    this.foodNameToFoodData = new Map()
+    this.cuisineNameToHeapifiedFoodData = new Map()
+
+    for (let i = 0; i < foods.length; ++i) {
+      let currentFood = new FoodData(foods[i], cuisines[i], ratings[i])
+      this.foodNameToFoodData.set(foods[i], currentFood)
+      if (!this.cuisineNameToHeapifiedFoodData.has(cuisines[i])) {
+        this.cuisineNameToHeapifiedFoodData.set(
+          cuisines[i],
+          new MaxPriorityQueue({
+            compare: (x, y) =>
+              x.rating === y.rating
+                ? x.name.localeCompare(y.name)
+                : y.rating - x.rating,
+          })
+        )
+      }
+      this.cuisineNameToHeapifiedFoodData.get(cuisines[i]).enqueue(currentFood)
+    }
+  }
+
+  changeRating(food, newRating) {
+    let toUpdate = this.foodNameToFoodData.get(food)
+    let updated = new FoodData(toUpdate.name, toUpdate.cuisine, newRating)
+    this.foodNameToFoodData.set(food, updated)
+    this.cuisineNameToHeapifiedFoodData.get(toUpdate.cuisine).enqueue(updated)
+  }
+
+  highestRated(cuisine) {
+    let highestRatedFoodForCuisine = ''
+    while (true) {
+      let food = this.cuisineNameToHeapifiedFoodData.get(cuisine).front()
+      if (food.rating !== this.foodNameToFoodData.get(food.name).rating) {
+        this.cuisineNameToHeapifiedFoodData.get(cuisine).dequeue()
+      } else {
+        highestRatedFoodForCuisine = food.name
+        break
+      }
+    }
+    return highestRatedFoodForCuisine
+  }
+}
 
 const opr = [
   'FoodRatings',
