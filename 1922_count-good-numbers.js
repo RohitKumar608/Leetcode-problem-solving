@@ -3,42 +3,31 @@
  * @return {number}
  */
 
+const MOD = BigInt(1000000007)
 var countGoodNumbers = function (n) {
-  const MODE = Math.pow(10, 9) + 7
-  let result = 0
-  const primeNumbers = {
-    2: true,
-    3: true,
-    5: true,
-    7: true,
+  const a = power(BigInt(5), parseInt(n / 2))
+  const b = power(BigInt(4), parseInt(n / 2))
+  if (n % 2 == 0) {
+    return (a * b) % MOD
+  } else {
+    return (BigInt(5) * a * b) % MOD
   }
-  let start = 0
-  if (n > 1) {
-    start = 1 + '0'.repeat(n - 1)
-  }
-  const end = 1 + '0'.repeat(n) - 1
-  console.log(start, end)
-  for (let i = +start; i <= end; i++) {
-    const numToStr = `${i}`
-    let hasFound = true
-    for (let j = 0; j < numToStr.length; j++) {
-      if (j % 2 === 0 && +numToStr[j] % 2 !== 0) {
-        hasFound = false
-        break
-      }
-
-      if (j % 2 === 1 && !primeNumbers[+numToStr[j]]) {
-        hasFound = false
-        break
-      }
-    }
-    if (hasFound) {
-      // console.log(numToStr)
-      result++
-      result = result % MODE
-    }
-  }
-  return result
 }
 
-console.log(countGoodNumbers(4))
+var power = function (x, n) {
+  if (n == 0) {
+    return BigInt(1)
+  }
+
+  if (n == 1) {
+    return x
+  }
+
+  const temp = power(x, parseInt(n / 2)) % MOD
+  if (n % 2 == 0) {
+    return temp * temp
+  } else {
+    return x * temp * temp
+  }
+}
+console.log(countGoodNumbers(50))
