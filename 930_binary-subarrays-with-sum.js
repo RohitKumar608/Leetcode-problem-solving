@@ -39,12 +39,24 @@ var numSubarraysWithSum2 = function (nums, goal) {
   return result
 }
 var numSubarraysWithSum = function (nums, goal) {
-  let result = 0
-  let left = 0
-  let sum = 0
-  for (let i = 0; i < nums.length; i++) {
-    sum += nums[i]
+  function helper(goal) {
+    if (goal < 0) {
+      return 0
+    }
+    let left = 0
+    let sum = 0
+    let res = 0
+    for (let i = 0; i < nums.length; i++) {
+      sum += nums[i]
+      while (sum > goal) {
+        sum -= nums[left]
+        left++
+      }
+      res += i - left + 1
+    }
+    return res
   }
+  return helper(goal) - helper(goal - 1)
 }
 
 console.log(numSubarraysWithSum([1, 0, 1, 0, 1], 2))
