@@ -13,3 +13,5 @@ var isPowerOfThree = function (n) {
   }
   return false
 }
+
+console.log(isPowerOfThree(86217457695827338571))
