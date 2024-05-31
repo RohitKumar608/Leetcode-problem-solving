@@ -19,5 +19,19 @@ var countTriplets = function (arr) {
   return result
 }
 
+var countTriplets = function (arr) {
+  let result = 0
+  for (let i = 0; i < arr.length - 1; i++) {
+    let currExor = arr[i]
+    for (let j = i + 1; j < arr.length; j++) {
+      currExor ^= arr[j]
+      if (currExor === 0) {
+        result += j - i
+      }
+    }
+  }
+  return result
+}
+
 console.log(countTriplets([2, 3, 1, 6, 7]))
 // console.log(countTriplets([1, 1, 1, 1, 1]))
