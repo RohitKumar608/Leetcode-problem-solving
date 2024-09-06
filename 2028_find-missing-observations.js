@@ -5,30 +5,20 @@
  * @return {number[]}
  */
 var missingRolls = function (rolls, mean, n) {
-  let newRolls = new Array(n).fill(0)
-  let sum = rolls.reduce((acc, roll) => acc + roll, 0)
+  if (mean == 6 && Math.min(...rolls) <= 5) return []
+  const sum = rolls.reduce((acc, roll) => acc + roll, 0)
   let remainingSum = mean * (n + rolls.length) - sum
-  let avgValues = Math.floor(remainingSum / n)
-  if (avgValues <= 0) return []
+  const avgValues = Math.floor(remainingSum / n)
+  if (avgValues <= 0 || remainingSum > 6 * n) return []
+  const newRolls = new Array(n).fill(avgValues)
+  remainingSum -= avgValues * n
   let left = 0
   while (remainingSum > 0) {
-    newRolls[left] += avgValues
-    if (newRolls[left] > 6) return []
-
-    remainingSum -= avgValues
+    newRolls[left]++
+    remainingSum--
     left++
-    if (remainingSum === 0) {
-      return newRolls
-    }
-    if (remainingSum < 0) {
-      return []
-    }
-    if (left === n) {
-      left = 0
-      avgValues = 1
-    }
   }
-  return []
+  return newRolls
 }
 
 console.log(missingRolls([3, 2, 4, 3], 4, 2))
