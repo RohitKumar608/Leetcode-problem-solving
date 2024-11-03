@@ -14,5 +14,3 @@ var rotateString = function (s, goal) {
 
   return false
 }
-
-console.log(rotateString('abcde', 'cdeab'))
