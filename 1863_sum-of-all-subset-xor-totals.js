@@ -20,4 +20,12 @@ var subsetXORSum = function (nums) {
   return subSets(nums).reduce((a, b) => a + b)
 }
 
+var subsetXORSum = function (nums) {
+  let res = 0
+  for (let num of nums) {
+    res |= num
+  }
+  return res << (nums.length - 1)
+}
+
 console.log(subsetXORSum([5, 1, 6]))
