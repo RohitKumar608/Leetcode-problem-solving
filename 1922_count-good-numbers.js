@@ -30,4 +30,3 @@ var power = function (x, n) {
     return x * temp * temp
   }
 }
-console.log(countGoodNumbers(50))
