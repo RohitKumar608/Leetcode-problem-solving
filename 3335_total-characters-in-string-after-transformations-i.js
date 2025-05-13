@@ -3,28 +3,26 @@
  * @param {number} t
  * @return {number}
  */
-/**
- * @param {string} s
- * @param {number} t
- * @return {number}
- */
 var lengthAfterTransformations = function (s, t) {
-  const MOD = 1e9 + 7
-  const cnt = Array(26).fill(0)
-  let res = s.length
-  let z = 25
-
-  for (let c of s) {
-    cnt[c.charCodeAt(0) - 'a'.charCodeAt(0)]++
+  const MOD = 1000000007
+  let cnt = new Array(26).fill(0)
+  for (const ch of s) {
+    cnt[ch.charCodeAt(0) - 97]++
   }
-
-  while (t--) {
-    res = (res + cnt[z]) % MOD
-    cnt[(z + 1) % 26] = (cnt[(z + 1) % 26] + cnt[z]) % MOD
-    z = (z + 25) % 26
-    console.log(z)
+  for (let round = 0; round < t; round++) {
+    let nxt = new Array(26).fill(0)
+    nxt[0] = cnt[25]
+    nxt[1] = (cnt[25] + cnt[0]) % MOD
+    for (let i = 2; i < 26; i++) {
+      nxt[i] = cnt[i - 1]
+    }
+    cnt = nxt
   }
-  return res
+  let ans = 0
+  for (let i = 0; i < 26; i++) {
+    ans = (ans + cnt[i]) % MOD
+  }
+  return ans
 }
 
 // console.log(lengthAfterTransformations('abcyy', 2))
