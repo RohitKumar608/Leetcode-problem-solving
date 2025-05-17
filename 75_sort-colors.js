@@ -28,5 +28,26 @@ var sortColors = function (nums) {
   }
   return nums
 }
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+
+var sortColors = function (nums) {
+  const frequency = [0, 0, 0]
+  let currIdx = 0
+  for (const num of nums) {
+    frequency[num]++
+  }
+
+  for (let i = 0; i < nums.length; i++) {
+    while (frequency[currIdx] == 0) {
+      currIdx++
+    }
+    frequency[currIdx]--
+    nums[i] = currIdx
+  }
+  return nums
+}
 
 console.log(sortColors([2, 0, 2, 1, 1, 0]))
