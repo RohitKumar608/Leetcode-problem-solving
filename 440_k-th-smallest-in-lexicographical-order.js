@@ -3,6 +3,7 @@
  * @param {number} k
  * @return {number}
  */
+
 var findKthNumber = function (n, k) {
   let curr = 1
   let i = 1
