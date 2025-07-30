@@ -16,5 +16,3 @@ var longestSubarray = function (nums) {
   }
   return result
 }
-
-console.log(longestSubarray([1, 2, 3, 3, 2, 2]))
