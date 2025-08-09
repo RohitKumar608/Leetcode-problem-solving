@@ -13,3 +13,14 @@ var isPowerOfTwo = function (n) {
   }
   return false
 }
+
+var isPowerOfTwo = function (n) {
+  let count = 0
+  let currVal = Math.pow(2, count)
+  while (n >= currVal) {
+    if (currVal === n) return true
+    count++
+    currVal = Math.pow(2, count)
+  }
+  return false
+}
