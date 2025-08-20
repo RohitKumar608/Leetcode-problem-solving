@@ -25,11 +25,3 @@ var countSquares = function (matrix) {
   }
   return res
 }
-
-console.log(
-  countSquares([
-    [0, 1, 1, 1],
-    [1, 1, 1, 1],
-    [0, 1, 1, 1],
-  ])
-)
