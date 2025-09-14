@@ -16,48 +16,49 @@ var spellchecker = function (wordlist, queries) {
     O: true,
     U: true,
   }
-  const wordListWithAsci = []
+  const wordListWithAsci = new Map()
   const wordListSet = new Set(wordlist)
   for (let i = 0; i < wordlist.length; i++) {
     let wordWithAsci = ''
-    for (let j = 0; j < wordlist[i].length; j++) {
-      if (vowels[wordlist[i][j]]) wordWithAsci += 0
-      else wordWithAsci += wordlist[i][j].toLowerCase().charCodeAt(0)
+    const str = wordlist[i].toLowerCase()
+    for (let j = 0; j < str.length; j++) {
+      if (vowels[str[j]]) wordWithAsci += 0
+      else wordWithAsci += str.charCodeAt(j)
     }
-    wordListWithAsci.push(wordWithAsci)
+    if (!wordListWithAsci.has(wordWithAsci)) {
+      wordListWithAsci.set(wordWithAsci, wordlist[i])
+    }
+    if (!wordListWithAsci.has(str)) {
+      wordListWithAsci.set(str, wordlist[i])
+    }
   }
   const result = []
   for (let idx = 0; idx < queries.length; idx++) {
     const query = queries[idx]
     result[idx] = ''
+    const queryStr = query.toLowerCase()
     if (wordListSet.has(query)) {
       result[idx] = query
       continue
     }
-    let firstMatch = ''
-    for (const word of wordlist) {
-      if (word.toLowerCase() === query.toLowerCase() && firstMatch == '') {
-        firstMatch = word
-      }
-    }
-
-    if (firstMatch) {
-      result[idx] = firstMatch
+    if (wordListWithAsci.has(queryStr)) {
+      result[idx] = wordListWithAsci.get(queryStr)
       continue
     }
     let queryWithAsci = ''
-    for (let i = 0; i < query.length; i++) {
-      if (vowels[query[i]]) queryWithAsci += 0
-      else queryWithAsci += query[i].toLowerCase().charCodeAt(0)
+    for (let i = 0; i < queryStr.length; i++) {
+      if (vowels[queryStr[i]]) queryWithAsci += 0
+      else queryWithAsci += queryStr.charCodeAt(i)
     }
-    const findIdx = wordListWithAsci.indexOf(queryWithAsci)
-    if (findIdx >= 0) {
-      result[idx] = wordlist[findIdx]
+    if (wordListWithAsci.has(queryWithAsci)) {
+      result[idx] = wordListWithAsci.get(queryWithAsci)
     }
   }
   return result
 }
 
+// console.log(spellchecker(['zeo', 'Zuo'], ['zuo']))
+// console.log(spellchecker(['yellow'], ['YellOw']))
 console.log(
   spellchecker(
     ['KiTe', 'kite', 'hare', 'Hare'],
@@ -75,5 +76,3 @@ console.log(
     ]
   )
 )
-
-console.log(spellchecker(['YellOw'], ['yollow']))
