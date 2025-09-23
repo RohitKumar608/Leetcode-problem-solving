@@ -18,8 +18,3 @@ var compareVersion = function (version1, version2) {
   if (result > 0) return 1
   return 0
 }
-
-console.log(compareVersion('1.0.1', '1'))
-console.log(compareVersion('1.05', '1.1'))
-console.log(compareVersion('1.0', '1.2'))
-console.log(compareVersion('0.1', '0.0.1'))
