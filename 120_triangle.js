@@ -13,15 +13,12 @@ var minimumTotal = function (triangle) {
     }
     if (row >= rowLen) return 0
     if (col >= colLen) return 0
-    const f1 = triangle[row][col] + getMinimumTotal(row + 1, col)
-    let f2 = Infinity
-    if (col <= colLen) {
-      f2 = triangle[row][col] + getMinimumTotal(row + 1, col + 1)
-    }
-    map.set(key, Math.min(f1, f2))
-    return Math.min(f1, f2)
+    const result = Math.min(
+      triangle[row][col] + getMinimumTotal(row + 1, col),
+      triangle[row][col] + getMinimumTotal(row + 1, col + 1)
+    )
+    map.set(key, result)
+    return result
   }
   return getMinimumTotal(0, 0)
 }
-
-console.log(minimumTotal([[2], [3, 4], [6, 5, 7], [4, 1, 8, 3]]))
