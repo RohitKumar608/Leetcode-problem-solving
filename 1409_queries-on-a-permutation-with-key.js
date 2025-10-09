@@ -3,6 +3,7 @@
  * @param {number} m
  * @return {number[]}
  */
+
 var processQueries = function (queries, m) {
   const values = []
   const result = []
