@@ -15,28 +15,24 @@ var countUnguarded = function (m, n, guards, walls) {
     matrix[i][j] = 1
   }
   for (const [i, j] of guards) {
-    //  for top column
     for (let row = i - 1; row >= 0; row--) {
       if (matrix[row][j] === 1 || matrix[row][j] === 2) {
         break
       }
       matrix[row][j] = 3
     }
-    // for bottom column
     for (let row = i + 1; row < m; row++) {
       if (matrix[row][j] === 1 || matrix[row][j] === 2) {
         break
       }
       matrix[row][j] = 3
     }
-    // for left row
     for (let col = j - 1; col >= 0; col--) {
       if (matrix[i][col] === 1 || matrix[i][col] === 2) {
         break
       }
       matrix[i][col] = 3
     }
-    // for right row
     for (let col = j + 1; col < n; col++) {
       if (matrix[i][col] === 1 || matrix[i][col] === 2) {
         break
